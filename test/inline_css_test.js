@@ -23,18 +23,31 @@ var grunt = require('grunt');
 */
 
 exports.inline_css = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
+  tearDown: function (done) {
+    grunt.util.spawn({
+      grunt: true,
+      args: ['clean']
+    }, function() {
+      done();
+    });
   },
 
-  basic: function(test) {
+  first_test: function (test) {
     test.expect(1);
-
-    var actual = grunt.file.read('tmp/out.html');
-    var expected = grunt.file.read('test/expected/out.html');
-    test.equal(actual, expected, 'should inline css');
-
+    test.ok(true, 'this has to work');
     test.done();
+  },
+
+  single_file: function (test) {
+    grunt.util.spawn({
+      grunt: true,
+      args: ['test:specific_file']
+    }, function() {
+      var actual = grunt.file.read('tmp/out.html');
+      var expected = grunt.file.read('test/expected/out.html');
+      test.equal(actual, expected, 'should inline css');
+
+      test.done();
+    });
   }
 };

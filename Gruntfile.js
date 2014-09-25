@@ -16,16 +16,16 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'tasks/*.js',
-        '<%= nodeunit.tests %>',
+        '<%= nodeunit.tests %>'
       ],
       options: {
-        jshintrc: '.jshintrc',
-      },
+        jshintrc: '.jshintrc'
+      }
     },
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp'],
+      tests: ['tmp']
     },
 
     // Configuration to be run (and then tested).
@@ -36,18 +36,17 @@ module.exports = function(grunt) {
         },
         files: {
           'tmp/out.html': 'test/fixtures/in.html'
-        },
-      },
+        }
+      }
     },
 
     // Unit tests.
     nodeunit: {
-      tests: ['test/*_test.js'],
-    },
-
+      all: ['test/**/*_test.js']
+    }
   });
 
-  // Actually load this plugin's task(s).
+    // Actually load this plugins task(s).
   grunt.loadTasks('tasks');
 
   // These plugins provide necessary tasks.
@@ -55,9 +54,20 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
+  grunt.registerTask('test:specific_file', function() {
+    var options = {
+      files: {
+        'tmp/out.html': 'test/fixtures/in.html'
+      }
+    };
+
+    grunt.config('inlinecss.options', options);
+    grunt.task.run('inlinecss');
+  });
+
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'inlinecss', 'nodeunit']);
+  grunt.registerTask('test', ['nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
