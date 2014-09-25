@@ -33,9 +33,6 @@ module.exports = function(grunt) {
       basic: {
         options: {
           extraCss: 'body { background: green; }'
-        },
-        files: {
-          'tmp/out.html': 'test/fixtures/in.html'
         }
       }
     },
@@ -54,14 +51,24 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
+  // Some tasks for running tests
   grunt.registerTask('test:specific_file', function() {
     var options = {
-      files: {
-        'tmp/out.html': 'test/fixtures/in.html'
-      }
+      'tmp/out.html': 'test/fixtures/in.html'
     };
 
-    grunt.config('inlinecss.options', options);
+    grunt.config('inlinecss.basic.files', options);
+    grunt.task.run('inlinecss');
+  });
+
+  grunt.registerTask('test:expanded_file', function () {
+    var options = 'tmp/in.html';
+
+    grunt.config('inlinecss.basic.files', options);
+
+    grunt.file.copy('test/fixtures/in.html', 'tmp/in.html');
+    grunt.file.copy('test/fixtures/file.css', 'tmp/file.css');
+
     grunt.task.run('inlinecss');
   });
 

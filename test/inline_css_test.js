@@ -39,14 +39,30 @@ exports.inline_css = {
   },
 
   single_file: function (test) {
+    test.expect(1);
     grunt.util.spawn({
       grunt: true,
       args: ['test:specific_file']
-    }, function() {
+    }, function(err, result) {
+      console.log('RESULT', result, '\n\n\n');
       var actual = grunt.file.read('tmp/out.html');
       var expected = grunt.file.read('test/expected/out.html');
       test.equal(actual, expected, 'should inline css');
 
+      test.done();
+    });
+  },
+
+  expanded_file: function (test) {
+    test.expect(1);
+    grunt.util.spawn({
+      grunt: true,
+      args: ['test:expanded_file']
+    }, function(err, result, code) {
+      var actual = grunt.file.read('tmp/in.html');
+      var expected = grunt.file.read('test/expected/out.html');
+
+      test.equal(actual, expected, 'should inline css');
       test.done();
     });
   }
